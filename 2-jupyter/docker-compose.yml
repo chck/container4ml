@@ -1,0 +1,8 @@
+services:
+  jupyter:
+    image: chck/container4ml-jupyter:1.0
+    build: .
+    ports:
+      - "8888:8888"
+    volumes:
+      - ${PWD}:/app
