@@ -1,0 +1,37 @@
+terraform {
+  required_version = "~> 1.0.11"
+
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 3.53.0"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 3.53.0"
+    }
+  }
+
+  backend "gcs" {
+    bucket = "_YOUR_BUCKET"
+    prefix = "container4ml"
+  }
+}
+
+variable "common" {
+  type = map(string)
+  default = {
+    project = "_YOUR_PROJECT"
+    region  = "asia-northeast1"
+    zone    = "asia-northeast1-c"
+  }
+}
+
+provider "google-beta" {
+  project = var.common.project
+}
+
+provider "google" {
+  project = var.common.project
+}
+

@@ -142,8 +142,10 @@ cython_debug/
 # PyCharm
 .idea/
 
-# Terraform
+# Terraform cuz this repo is tutorial
 *.tf
+*.terraform.lock.hcl
+
 ### https://raw.github.com/github/gitignore/eee21bf0c397cddc39ff1c94615d135e0ad36f8c/Terraform.gitignore
 
 # Local .terraform directories
