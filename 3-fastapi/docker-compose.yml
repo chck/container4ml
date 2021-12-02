@@ -1,0 +1,17 @@
+services:
+  myapp:
+    image: chck/container4ml-fastapi:1.0
+    build: .
+    ports:
+      - "2222:80"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DEBUG=true
+      - REDISHOST=myredis
+      - MODEL_PATH=/models/ua_classifier.bin
+    volumes:
+      - ${PWD}:/app
+    depends_on:
+      - myredis
+  myredis:
+    image: redis:alpine
