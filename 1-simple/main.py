@@ -1,3 +1,3 @@
 import sklearn
 
-print(sklearn.__version__)
+print(f"scikit-learn: {sklearn.__version__}")
