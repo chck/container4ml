@@ -16,7 +16,9 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry export --without-hashes -f requirements.txt -o requirements.txt \
  && pip install -r requirements.txt --no-cache-dir
 
-WORKDIR /app
+WORKDIR ${APP_HOME}
+# Tips
+COPY *.bin .
 
 EXPOSE 8888
 
