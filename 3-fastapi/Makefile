@@ -1,3 +1,4 @@
+BASE_IMAGE_URI:=chck/container4ml-fastapi
 IMAGE_URI:=gcr.io/$(GCP_PROJECT)/container4ml/fastapi
 TAG:=1.0
 
@@ -10,6 +11,7 @@ build:
 
 .PHONY: push ## Push an image or a repository to a registry
 push:
+	docker tag $(BASE_IMAGE_URI):$(TAG) $(IMAGE_URI):$(TAG)
 	docker tag $(IMAGE_URI):$(TAG) $(IMAGE_URI):latest
 	docker push $(IMAGE_URI):$(TAG)
 	docker push $(IMAGE_URI):latest
