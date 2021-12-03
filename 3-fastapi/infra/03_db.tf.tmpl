@@ -1,0 +1,26 @@
+variable "db" {
+  type = map(string)
+  default = {
+    name     = "container4ml-redis"
+    vpc_name = "container4ml-vpc"
+  }
+}
+
+resource "google_redis_instance" "redis" {
+  name           = var.db.name
+  memory_size_gb = 8
+  location_id    = var.common.zone
+  region         = var.common.region
+  display_name   = var.db.name
+}
+
+resource "google_vpc_access_connector" "redis_vpc" {
+  name          = var.db.vpc_name
+  ip_cidr_range = "10.8.0.0/28" # custom recommendation from GCP
+  network       = "default"
+  region        = var.common.region
+}
+
+output "redis-host" {
+  value = google_redis_instance.redis.host
+}

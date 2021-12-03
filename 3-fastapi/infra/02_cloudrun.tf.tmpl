@@ -9,17 +9,23 @@ variable "container4ml" {
 resource "google_cloud_run_service" "container4ml" {
   name     = "container4ml"
   location = var.common.region
-
+  depends_on = [
+    google_vpc_access_connector.redis_vpc,
+    google_redis_instance.redis,
+  ]
   metadata {
     annotations = {
-      "run.googleapis.com/ingress" : "internal-and-cloud-load-balancing"
+      "run.googleapis.com/vpc-access-connector" : google_vpc_access_connector.redis_vpc.id
     }
   }
-
   template {
     spec {
       containers {
         image = "gcr.io/cloudrun/hello"
+        env {
+          name  = "REDISHOST"
+          value = google_redis_instance.redis.host
+        }
       }
     }
   }
@@ -75,6 +81,23 @@ module "lb_http" {
       }
     }
   }
+}
+
+data "google_iam_policy" "noauth" {
+  binding {
+    role = "roles/run.invoker"
+    members = [
+      "allUsers",
+    ]
+  }
+}
+
+resource "google_cloud_run_service_iam_policy" "noauth" {
+  location = google_cloud_run_service.container4ml.location
+  project  = google_cloud_run_service.container4ml.project
+  service  = google_cloud_run_service.container4ml.name
+
+  policy_data = data.google_iam_policy.noauth.policy_data
 }
 
 output "load-balancer-ip" {
